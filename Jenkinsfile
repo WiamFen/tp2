@@ -43,5 +43,18 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy image') {
+            steps {
+                bat '''
+                    set DOCKER_HOST=
+                    set DOCKER_TLS_VERIFY=
+                    set DOCKER_CERT_PATH=
+
+                    docker rm -f tp2-deploy 2>nul
+                    docker run -d --name tp2-deploy -p 8081:80 %registry%:%BUILD_NUMBER%
+                '''
+            }
+        }
     }
 }
